@@ -9,7 +9,7 @@ QT       += network
 
 QT       += gui
 
-TARGET = OpenGVTest
+TARGET = OpenGEVTestApplication
 CONFIG   += console
 CONFIG   -= app_bundle
 
@@ -31,11 +31,11 @@ SOURCES += main.cpp \
     depthrgbobserver.cpp
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build/build-desktop-qt4.8GCC-64bit-debug/release/ -lOpenGV
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/build-desktop-qt4.8GCC-64bit-debug/debug/ -lOpenGV
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build/build-opengev-qt4.8GCC-64bit-debug/release/ -lOpenGEV
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/build-opengev-qt4.8GCC-64bit-debug/debug/ -lOpenGEV
 else:unix {
-    CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/build-desktop-qt4.8GCC-64bit-debug -lOpenGV
-    CONFIG(release, release|debug): LIBS += -L$$PWD/../build/build-desktop-qt4.8GCC-64bit-release -lOpenGV
+    CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/build-opengev-qt4.8GCC-64bit-debug -lOpenGEV
+    CONFIG(release, release|debug): LIBS += -L$$PWD/../build/build-opengev-qt4.8GCC-64bit-release -lOpenGEV
 }
 
 

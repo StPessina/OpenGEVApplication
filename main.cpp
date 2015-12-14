@@ -5,7 +5,7 @@
 
 #include <QThread>
 
-#include <opengv.h>
+#include <opengev.h>
 
 #include "app.h"
 
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    OpenGV::configure();
+    OpenGEV::configure();
 
     /*
     App* myObj = new App(); // 0 = no parent
