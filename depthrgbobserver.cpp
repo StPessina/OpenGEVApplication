@@ -103,6 +103,12 @@ void DepthRgbObserver::update()
     cloud.sensor_orientation_.y () = 0.0f;
     cloud.sensor_orientation_.z () = 0.0f;
 
+    end = std::chrono::steady_clock::now();
+
+    meanTimeMs = (meanTimeMs+std::chrono::duration_cast<std::chrono::microseconds>(end- start).count())/2;
+
+    std::cout<<meanTimeMs<<std::endl;
+
     emit newStreamData(ptrCloud);
 }
 
