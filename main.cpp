@@ -37,8 +37,10 @@ int main(int argc, char *argv[])
 
     char* p;
     int channels = strtol(argv[1], &p, 10);
+    int packetSize = strtol(argv[2], &p, 10);
+    int packetDelay = strtol(argv[3], &p, 10);
 
-    App myObj (channels);
+    App myObj (channels, packetSize, packetDelay);
     myObj.start();
 
     return a.exec();

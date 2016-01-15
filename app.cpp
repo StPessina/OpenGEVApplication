@@ -1,7 +1,7 @@
 #include "app.h"
 
-App::App(int channels)
-    : channels(channels)
+App::App(int channels, int packetSize, int packetDelay)
+    : channels(channels), packetSize(packetSize), packetDelay(packetDelay)
 {
     app = new GVApplication();
     connect(this, SIGNAL(initialization()),this,SLOT(setupTimer()));
@@ -12,9 +12,9 @@ App::App(int channels)
 void App::checkSlot()
 {
     if(initPartnerDevice) {
-        if(app->discoverDevice()>0) {
+        if(app->discoverDevices()>0) {
 
-            foreach (PartnerDevice aDevice, app->getDiscoveredDevice()) {
+            foreach (PartnerDevice aDevice, app->getDiscoveredDevices()) {
                 std::cout<<aDevice.manufactureName.toStdString()<<std::endl;
                 std::cout<<aDevice.modelName.toStdString()<<std::endl;
                 std::cout<<aDevice.deviceVersion.toStdString()<<std::endl;
@@ -24,7 +24,7 @@ void App::checkSlot()
                 std::cout<<aDevice.defaultGateway.toString().toStdString()<<std::endl;
             }
 
-            pdevice = app->getDiscoveredDevice().at(0);
+            pdevice = app->getDiscoveredDevices().at(0);
             initPartnerDevice = false;
 
         }
@@ -38,8 +38,8 @@ void App::checkSlot()
 
                     if((channels & 0xF00)==0x100) {
                         if(pdevice.openStreamChannel(0)==GEV_STATUS_SUCCESS) {
-                            pdevice.setStreamChannelDelay(0,10000);
-                            pdevice.setStreamChannelPacketLength(0,65000);
+                            pdevice.setStreamChannelDelay(0,packetDelay);
+                            pdevice.setStreamChannelPacketLength(0,packetSize);
                             obs1 = new DepthObserver(pdevice.getStreamChannel(0));
 
                             connect(obs1, SIGNAL(newStreamData(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
@@ -50,8 +50,8 @@ void App::checkSlot()
                     if((channels & 0x0F0)==0x010) {
                         if(pdevice.openStreamChannel(1)==GEV_STATUS_SUCCESS) {
 
-                            pdevice.setStreamChannelDelay(1,10000);
-                            pdevice.setStreamChannelPacketLength(1,65000);
+                            pdevice.setStreamChannelDelay(1,packetDelay);
+                            pdevice.setStreamChannelPacketLength(1,packetSize);
                             obs2 = new RgbObserver(pdevice.getStreamChannel(1));
 
                             connect(obs2, SIGNAL(newStreamData(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
@@ -62,8 +62,8 @@ void App::checkSlot()
                     if((channels & 0x00F)==0x001) {
                         if(pdevice.openStreamChannel(2)==GEV_STATUS_SUCCESS) {
 
-                            pdevice.setStreamChannelDelay(2,10000);
-                            pdevice.setStreamChannelPacketLength(2,65000);
+                            pdevice.setStreamChannelDelay(2,packetDelay);
+                            pdevice.setStreamChannelPacketLength(2,packetSize);
                             obs3 = new DepthRgbObserver(pdevice.getStreamChannel(2));
                             connect(obs3, SIGNAL(newStreamData(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
                                     simpleViewer, SLOT(updateViewer3(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)));

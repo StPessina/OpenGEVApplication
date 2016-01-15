@@ -24,6 +24,9 @@
 
 #include "simpleviewer.h"
 
+#define STREAM_PACKET_DELAY 10000
+#define STREAM_PACKET_SIZE 576
+
 #define DEPTH 0x100
 #define RGB 0x010
 #define DEPTHRBG 0x001
@@ -35,7 +38,7 @@ class App : public QThread
 {
     Q_OBJECT
 public:
-    App(int channels);
+    App(int channels, int packetSize, int packetDelay);
 
     std::string a = "MAN_NAME";
     std::string b = "MODEL_NAME";
@@ -61,6 +64,10 @@ public:
     bool initStreamChannel = true;
 
     int channels;
+
+    int packetSize;
+
+    int packetDelay;
 
 signals:
     void initialization();
