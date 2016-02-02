@@ -36,13 +36,18 @@ void App::checkSlot()
             if(initStreamChannel) {
                 if(pdevice.getStreamingChannelNumber()>=0) {
 
+                    hfov = pdevice.getHorizontalFieldOfView();
+                    vfov = pdevice.getVerticalFieldOfView();
+
+                    std::cout<<"HFOV: "<<hfov<<"; VFOV: "<<vfov<<std::endl;
+
                     if((channels & 0xF00)==0x100) {
                         if(pdevice.openStreamChannel(0)==GEV_STATUS_SUCCESS) {
                             pdevice.setStreamChannelDelay(0,packetDelay);
                             pdevice.setStreamChannelPacketLength(0,packetSize);
-                            obs1 = new DepthObserver(pdevice.getStreamChannel(0));
+                            obs1 = new DepthStreamDataObserver(*pdevice.getStreamChannel(0),hfov,vfov);
 
-                            connect(obs1, SIGNAL(newStreamData(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
+                            connect(obs1, SIGNAL(pointCloudUpdate(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
                                     simpleViewer, SLOT(updateViewer1(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)));
                         }
                     }
@@ -52,9 +57,9 @@ void App::checkSlot()
 
                             pdevice.setStreamChannelDelay(1,packetDelay);
                             pdevice.setStreamChannelPacketLength(1,packetSize);
-                            obs2 = new RgbObserver(pdevice.getStreamChannel(1));
+                            obs2 = new ColorStreamDataObserver(*pdevice.getStreamChannel(1),hfov,vfov);
 
-                            connect(obs2, SIGNAL(newStreamData(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
+                            connect(obs2, SIGNAL(pointCloudUpdate(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
                                     simpleViewer, SLOT(updateViewer2(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)));
                         }
                     }
@@ -64,8 +69,8 @@ void App::checkSlot()
 
                             pdevice.setStreamChannelDelay(2,packetDelay);
                             pdevice.setStreamChannelPacketLength(2,packetSize);
-                            obs3 = new DepthRgbObserver(pdevice.getStreamChannel(2));
-                            connect(obs3, SIGNAL(newStreamData(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
+                            obs3 = new DepthColorStreamDataObserver(*pdevice.getStreamChannel(2),hfov,vfov);
+                            connect(obs3, SIGNAL(pointCloudUpdate(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
                                     simpleViewer, SLOT(updateViewer3(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)));
                         }
                     }

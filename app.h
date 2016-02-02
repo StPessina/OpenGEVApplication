@@ -18,9 +18,9 @@
 
 #include "iostream"
 
-#include "depthobserver.h"
-#include "rgbobserver.h"
-#include "depthrgbobserver.h"
+#include <ApplicationStreamDataObserver/depthstreamdataobserver.h>
+#include <ApplicationStreamDataObserver/colorstreamdataobserver.h>
+#include <ApplicationStreamDataObserver/depthcolorstreamdataobserver.h>
 
 #include "simpleviewer.h"
 
@@ -49,9 +49,9 @@ public:
 
     PartnerDevice pdevice;
 
-    DepthObserver* obs1;
-    RgbObserver* obs2;
-    DepthRgbObserver* obs3;
+    DepthStreamDataObserver* obs1;
+    ColorStreamDataObserver* obs2;
+    DepthColorStreamDataObserver* obs3;
 
     QTimer* timer;
 
@@ -68,6 +68,8 @@ public:
     int packetSize;
 
     int packetDelay;
+
+    int vfov, hfov;
 
 signals:
     void initialization();
