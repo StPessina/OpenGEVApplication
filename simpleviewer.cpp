@@ -37,22 +37,22 @@ SimpleViewer::SimpleViewer(int channels)
     viewer.addCoordinateSystem (1.0);
 }
 
-void SimpleViewer::updateViewer1(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &cloud)
+void SimpleViewer::updateViewer1()
 {
-    viewer.updatePointCloud(cloud,"IR");
+    viewer.updatePointCloud(obs1->ptrCloud,"IR");
     viewer.spinOnce();
 }
 
 
-void SimpleViewer::updateViewer2(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &cloud)
+void SimpleViewer::updateViewer2()
 {
-    viewer.updatePointCloud(cloud,"RGB");
+    viewer.updatePointCloud(obs2->ptrCloud,"RGB");
     viewer.spinOnce();
 }
 
-void SimpleViewer::updateViewer3(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &cloud)
+void SimpleViewer::updateViewer3()
 {
-    viewer.updatePointCloud(cloud,"IRRGB");
+    viewer.updatePointCloud(obs3->ptrCloud,"IRRGB");
     viewer.spinOnce();
 }
 

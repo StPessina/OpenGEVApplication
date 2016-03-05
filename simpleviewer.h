@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "ApplicationStreamDataObserver/abstractstreamdataobserver.h"
+
 #include <pcl/visualization/cloud_viewer.h>
 
 
@@ -14,10 +16,14 @@ class SimpleViewer : public QObject
 
     pcl::visualization::PCLVisualizer viewer;
 
+    AbstractStreamDataObserver* obs1;
+    AbstractStreamDataObserver* obs2;
+    AbstractStreamDataObserver* obs3;
+
 public slots:
-    void updateViewer1(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &cloud);
-    void updateViewer2(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &cloud);
-    void updateViewer3(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &cloud);
+    void updateViewer1();
+    void updateViewer2();
+    void updateViewer3();
 
 
 private:

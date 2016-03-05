@@ -14,17 +14,17 @@ void App::checkSlot()
     if(initPartnerDevice) {
         if(app->discoverDevices()>0) {
 
-            foreach (PartnerDevice aDevice, app->getDiscoveredDevices()) {
-                std::cout<<aDevice.manufactureName.toStdString()<<std::endl;
-                std::cout<<aDevice.modelName.toStdString()<<std::endl;
-                std::cout<<aDevice.deviceVersion.toStdString()<<std::endl;
-                std::cout<<aDevice.macAddress.toStdString()<<std::endl;
-                std::cout<<aDevice.ipAddress.toString().toStdString()<<std::endl;
-                std::cout<<aDevice.subnetMask.toString().toStdString()<<std::endl;
-                std::cout<<aDevice.defaultGateway.toString().toStdString()<<std::endl;
+            foreach (PartnerDevice* aDevice, app->getDiscoveredDevices()) {
+                std::cout<<aDevice->manufactureName.toStdString()<<std::endl;
+                std::cout<<aDevice->modelName.toStdString()<<std::endl;
+                std::cout<<aDevice->deviceVersion.toStdString()<<std::endl;
+                std::cout<<aDevice->macAddress.toStdString()<<std::endl;
+                std::cout<<aDevice->ipAddress.toString().toStdString()<<std::endl;
+                std::cout<<aDevice->subnetMask.toString().toStdString()<<std::endl;
+                std::cout<<aDevice->defaultGateway.toString().toStdString()<<std::endl;
             }
 
-            pdevice = app->getDiscoveredDevices().at(0);
+            pdevice = *(app->getDiscoveredDevices().at(0));
             initPartnerDevice = false;
 
         }
@@ -47,8 +47,10 @@ void App::checkSlot()
                             pdevice.setStreamChannelPacketLength(0,packetSize);
                             obs1 = new DepthStreamDataObserver(*pdevice.getStreamChannel(0),hfov,vfov);
 
-                            connect(obs1, SIGNAL(pointCloudUpdate(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
-                                    simpleViewer, SLOT(updateViewer1(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)));
+                            connect(obs1, SIGNAL(pointCloudUpdate()),
+                                    simpleViewer, SLOT(updateViewer1()));
+
+                            simpleViewer->obs1 = obs1;
                         }
                     }
 
@@ -59,8 +61,10 @@ void App::checkSlot()
                             pdevice.setStreamChannelPacketLength(1,packetSize);
                             obs2 = new ColorStreamDataObserver(*pdevice.getStreamChannel(1),hfov,vfov);
 
-                            connect(obs2, SIGNAL(pointCloudUpdate(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
-                                    simpleViewer, SLOT(updateViewer2(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)));
+                            connect(obs2, SIGNAL(pointCloudUpdate()),
+                                    simpleViewer, SLOT(updateViewer2()));
+
+                            simpleViewer->obs2 = obs2;
                         }
                     }
 
@@ -70,8 +74,9 @@ void App::checkSlot()
                             pdevice.setStreamChannelDelay(2,packetDelay);
                             pdevice.setStreamChannelPacketLength(2,packetSize);
                             obs3 = new DepthColorStreamDataObserver(*pdevice.getStreamChannel(2),hfov,vfov);
-                            connect(obs3, SIGNAL(pointCloudUpdate(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)),
-                                    simpleViewer, SLOT(updateViewer3(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr)));
+                            connect(obs3, SIGNAL(pointCloudUpdate()),
+                                    simpleViewer, SLOT(updateViewer3()));
+                            simpleViewer->obs3 = obs3;
                         }
                     }
 
